@@ -1,8 +1,8 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String,Float
 from sqlalchemy.orm import relationship
+from dataclasses import dataclass
 
-from .database import Base
-
+from database import Base
 
 class Address(Base):
     __tablename__ = "address"

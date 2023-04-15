@@ -1,9 +1,9 @@
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
-from . import crud, models, schemas
-from .database import SessionLocal, engine
-from . import validations
+import crud, models, schemas
+from database import SessionLocal, engine
+import validations
 from fastapi.encoders import jsonable_encoder
 
 
@@ -25,25 +25,26 @@ def create_user(address: schemas.Address, db: Session = Depends(get_db)):
     db_user = crud.get_address_by_email(db, email=address.email)
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
-    ok = validations.validate_address(address)
+    ok = validations.validate_address(address.lat,address.long)
     if not ok:
         raise HTTPException(status_code=400, detail="Lattitude and Longitude Should be in correct format")
-    return crud.create_user(db=db, user=address)
+    return crud.save_address(db=db, address=address)
 
 
-@app.post("/get_address_by_email/", response_model=schemas.Address)
-def get_address_by_email(address: schemas.Address, db: Session = Depends(get_db)):
-    db_user = crud.get_address_by_email(db, email=address.email)
+@app.post("/get_address_by_email/", response_model=list[schemas.Address])
+def get_address_by_email(email: schemas.Email, db: Session = Depends(get_db)):
+    db_user = crud.get_address_by_email(db, email=email.email)
+    print(db_user)
+    return db_user
+
+
+@app.post("/get_address_by_lat_long/", response_model=list[schemas.Address])
+def get_address_by_email(lat: schemas.Latitude,long: schemas.Longitude, db: Session = Depends(get_db)):
+    db_user = crud.get_address_by_lat_long(db, lat=lat.lat,long=long.long)
     return jsonable_encoder(list(db_user))
 
 
-@app.post("/get_address_by_lat_long/", response_model=schemas.Address)
-def get_address_by_email(lat: schemas.Address.lat,long=schemas.Address.long, db: Session = Depends(get_db)):
-    db_user = crud.get_address_by_lat_long(db, lat=lat,long=long)
-    return jsonable_encoder(list(db_user))
-
-
-@app.post("/get_address_by_lat_long/", response_model=schemas.Address)
-def get_all_address(address: schemas.Address, db: Session = Depends(get_db)):
+@app.post("/get_address_all/", response_model=list[schemas.Address])
+def get_all_address(db: Session = Depends(get_db)):
     address = crud.get_address(db)
     return jsonable_encoder(list(address))

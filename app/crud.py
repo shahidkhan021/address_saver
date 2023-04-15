@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
-from . import models, schemas
+import models, schemas
 
 
-def get_address(db: Session, user_id: int):
+def get_address(db: Session):
     return db.query(models.Address).all()
 
 def get_address_by_lat_long(db:Session, lat:float, long: float):

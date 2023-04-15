@@ -9,3 +9,15 @@ class Address(BaseModel):
 
     class Config:
         orm_mode = True
+
+class Latitude(BaseModel):
+    lat: float
+
+class Longitude(BaseModel):
+    long: float
+
+class Email(BaseModel):
+    email: str
+
+class AddressList(BaseModel):
+    address_list: list[Address] = []
