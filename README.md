@@ -16,6 +16,6 @@ Docker
 
             OR
 
-3.2 docker run -it -p 8000:8000 -v $(pwd)/app:/app fastapi_interview
+3.2 docker run -it -p 8000:8000 -v $(pwd)/app:/app fastapi_interview (if on linux)
 
 4.open the url localhost:8000/docs/ for seeing the api docs
