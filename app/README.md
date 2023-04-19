@@ -8,8 +8,6 @@ Docker
 
 1.Clone This Repo
 
-2.Checkout to master branch
-
 2.docker build -t fastapi_interview .
 
 3.1 docker run -it -p 8000:8000 -v ${pwd}/app:/app fastapi_interview (if on windows)
